@@ -3,8 +3,8 @@
 #
 
 ifneq (,$(APPDIR))
-CONFIG_BASEDIR := $(APPDIR)/
-export AOS_CONFIG_IN := $(APPDIR)/Config.in
+CONFIG_BASEDIR := $(subst \,/,$(APPDIR))/
+export AOS_CONFIG_IN := $(subst \,/,$(APPDIR))/Config.in
 else
 CONFIG_BASEDIR :=
 export AOS_CONFIG_IN := $(subst .//,./,$(SOURCE_ROOT)/build/Config.in)
