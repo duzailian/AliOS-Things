@@ -359,7 +359,7 @@ def convert_configin_to_header(config_in_file, comp_name, destdir):
     fn = open (filename, 'w+')
     fn.write("//================This is split line================\n")
     fn.write("// %s %s\n\n" % (COMPONENT_KEYWORD, comp_name))
-    with open (config_in_file, 'r') as f:
+    with open (config_in_file, 'r',encoding="utf-8") as f:
         lines = []
         new_block = False
         p1 = re.compile(r"if (.*)=\s*(y|n)")
