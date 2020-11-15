@@ -1612,7 +1612,7 @@ int sal_module_register(sal_op_t *module)
             }
             current = current->next;
         }
-        current = module;
+        current->next = module;
     }
 
     return 0;
