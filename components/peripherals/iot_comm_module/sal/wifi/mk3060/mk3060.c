@@ -54,7 +54,6 @@ static netconn_data_input_cb_t g_netconn_data_input_cb;
 static netconn_client_status_notify_t g_netconn_client_status_cb;
 #endif
 static char localipaddr[16];
-static uart_dev_t uart_dev;
 int at_dev_fd = -1;
 
 static int socket_data_info_get(char *buf, uint32_t buflen, at_data_check_cb_t valuecheck);
@@ -972,21 +971,11 @@ extern hal_wifi_module_t aos_wifi_module_mk3060;
 int mk3060_sal_add_dev(void* data)
 {
     at_config_t at_config = { 0 };
+    sal_device_config_t* config = (sal_device_config_t *)data;
 
     at_init();
 
-    if(data != NULL)
-    {
-        sal_device_config_t* config = (sal_device_config_t *)data;
-        uart_dev.port  = config->uart_dev.port;
-        uart_dev.config.baud_rate    = config->uart_dev.config.baud_rate;
-        uart_dev.config.data_width   = config->uart_dev.config.data_width;
-        uart_dev.config.parity       = config->uart_dev.config.parity;
-        uart_dev.config.stop_bits    = config->uart_dev.config.stop_bits;
-        uart_dev.config.flow_control = config->uart_dev.config.flow_control;
-        uart_dev.config.mode         = config->uart_dev.config.mode;
-    }
-    else
+    if(NULL == data)
     {
         LOGE(TAG, "Error: Uart dev is not configured! Please"
              " provide the config in sal_add_dev() call.\n");
@@ -994,8 +983,8 @@ int mk3060_sal_add_dev(void* data)
     }
     /* configure and add one uart dev */
     at_config.type                             = AT_DEV_UART;
-    at_config.port                             = uart_dev.port;
-    at_config.dev_cfg                          = &uart_dev;
+    at_config.port                             = config->uart_dev.port;
+    at_config.dev_cfg                          = &config->uart_dev;
     at_config.send_delimiter                   = AT_SEND_DELIMITER;
     at_config.reply_cfg.reply_prefix           = AT_RECV_PREFIX;
     at_config.reply_cfg.reply_success_postfix  = AT_RECV_SUCCESS_POSTFIX;
